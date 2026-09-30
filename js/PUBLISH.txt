@@ -1,0 +1,2 @@
+pnpm login
+pnpm publish --no-git-checks

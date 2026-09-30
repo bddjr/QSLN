@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qsln-py"
+version = "1.0.0"
+description = "Quick Scratch List Notation"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "Unlicense"
+authors = [{ name = "bddjr" }]
+keywords = ["qsln", "scratch"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+
+[project.urls]
+Homepage = "https://github.com/bddjr/QSLN"
+Repository = "https://github.com/bddjr/QSLN.git"
+
+[tool.setuptools]
+py-modules = ["qsln"]

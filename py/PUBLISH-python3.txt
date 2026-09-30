@@ -1,0 +1,5 @@
+python3 -V
+python3 test_qsln.py
+pip install build twine
+python3 -m build
+twine upload dist/*

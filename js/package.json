@@ -1,0 +1,31 @@
+{
+  "name": "qsln-js",
+  "description": "Quick Scratch List Notation",
+  "version": "1.0.0",
+  "author": "bddjr",
+  "license": "Unlicense",
+  "type": "module",
+  "main": "qsln.mjs",
+  "types": "qsln.d.mts",
+  "files": [
+    "qsln.mjs",
+    "qsln.d.mts"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bddjr/QSLN.git",
+    "directory": "js"
+  },
+  "scripts": {
+    "tsc": "tsc",
+    "test": "tsc && node scripts/test.mjs",
+    "prepublishOnly": "pnpm test"
+  },
+  "keywords": [
+    "qsln",
+    "scratch"
+  ],
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  }
+}

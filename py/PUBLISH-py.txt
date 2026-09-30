@@ -1,0 +1,6 @@
+py -V
+py test_qsln.py
+pip install build twine
+py -m build
+twine check dist/*
+twine upload --verbose dist/*
