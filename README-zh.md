@@ -69,10 +69,10 @@ $$\Large\underline{\text{H}}\;\underline{\text{Length}}\;\underline{\text{Value}
 
 ## Scratch
 
-Open with TurboWarp editor:  
+使用 TurboWarp 编辑器打开:  
 https://turbowarp.org/editor?project_title=%5BQSLN%5D+Quick+Scratch+List+Notation&project_url=bddjr.github.io%2FQSLN%2F%5BQSLN%5D+Quick+Scratch+List+Notation.sb3
 
-Scratch Project Link:  
+Scratch 项目链接:  
 https://scratch.mit.edu/projects/1386520011/
 
 返回的错误在 `QSLN.error` 的第 1 项。  
