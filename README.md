@@ -121,7 +121,7 @@ Output list:
 Errors:
 - `parse: Unexpected input offset`
 - `parse: Unexpected end of input`
-- `parse: Unexpected token '�' at position �`
+- `parse: Unexpected token '<char>' at position <offset>`
 
 You can use `QSLN.parse` as an iterator, calling it multiple times to parse multiple sublists.
 

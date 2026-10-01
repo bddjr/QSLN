@@ -121,7 +121,7 @@ https://scratch.mit.edu/projects/1386520011/
 错误:
 - `parse: Unexpected input offset`
 - `parse: Unexpected end of input`
-- `parse: Unexpected token '�' at position �`
+- `parse: Unexpected token '<char>' at position <offset>`
 
 你可以把 `QSLN.parse` 当迭代器用，多次调用以解析多个子列表。
 
