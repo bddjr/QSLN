@@ -58,12 +58,12 @@ $$\Large\underline{\text{H}}\;\underline{\text{Length}}\;\underline{\text{Value}
 | 原始数据 (`string[][]`) | QSLN 序列化结果 | 说明 |
 | :--- | :--- | :--- |
 | `[["a", "b"], ["cd", "ef"]]` | `01a01b;02cd02ef;` | 基础二维列表 |
-| `[["hello;world"]]` | `0bhello;world;` | 内嵌分号原样存储，不会破坏解析 |
+| `[["hello;world"]]` | `111hello;world;` | 内嵌分号原样存储，不会破坏解析 |
 | `[[]]` | `;` | 单个空列表 |
 | `[[], []]` | `;;` | 两个连续空列表 |
 | `[[""]]` | `00;` | 包含一个空字符串的列表 |
 | `[["", "x"]]` | `0001x;` | 空字符串与普通字符串混合 |
-| `[["🎉 Scratch 🐱"]]` | `0d🎉 Scratch 🐱;` | 完整原生支持 Unicode 与 Emoji |
+| `[["🎉 Scratch 🐱"]]` | `113🎉 Scratch 🐱;` | 完整原生支持 Unicode 与 Emoji |
 
 ---
 

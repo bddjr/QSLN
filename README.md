@@ -58,12 +58,12 @@ $$\Large\underline{\text{H}}\;\underline{\text{Length}}\;\underline{\text{Value}
 | Data (`string[][]`) | QSLN Encoded String | Description |
 | :--- | :--- | :--- |
 | `[["a", "b"], ["cd", "ef"]]` | `01a01b;02cd02ef;` | Basic two-dimensional list |
-| `[["hello;world"]]` | `0bhello;world;` | Embedded semicolon does not break parsing |
+| `[["hello;world"]]` | `111hello;world;` | Embedded semicolon does not break parsing |
 | `[[]]` | `;` | Single empty list |
 | `[[], []]` | `;;` | Two consecutive empty lists |
 | `[[""]]` | `00;` | List containing one empty string |
 | `[["", "x"]]` | `0001x;` | Empty string alongside a non-empty string |
-| `[["🎉 Scratch 🐱"]]` | `0d🎉 Scratch 🐱;` | Unicode and emoji support |
+| `[["🎉 Scratch 🐱"]]` | `113🎉 Scratch 🐱;` | Unicode and emoji support |
 
 ---
 
