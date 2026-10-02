@@ -55,10 +55,46 @@ class TestQSLN(unittest.TestCase):
             [[";", ";;", ";;;"]],
             [["a;b", ";c;", ";;;d;;;"]],
             [["\n\r\t", "   ", "line1\nline2\r\nline3"]],
-            [["你好，世界！", "🐱 Scratch", "🎉🚀✨", "αβγδε", "Привет"]]
         ]
         for c in cases:
             self.assertEqual(qsln.parse(qsln.stringify(c)), c)
+
+    def test_ucs2_bmp_characters(self):
+        # Non-ASCII characters strictly within BMP (code <= 0xFFFF, UCS-2 fast path)
+        cases = [
+            [["你好，世界！", "中文测试", "αβγδε", "Привет", "éàçü"]],
+            [["\uffff", "max_bmp:\uffff"]],
+            [["日本語のテスト", "한국어 테스트"]],
+        ]
+        for c in cases:
+            enc = qsln.stringify(c)
+            self.assertFalse(enc.isascii())
+            self.assertEqual(len(enc.encode(qsln.UTF16_CODEC)) >> 1, len(enc))
+            self.assertEqual(qsln.parse(enc), c)
+
+        # Explicit header checks for BMP characters
+        self.assertEqual(qsln.stringify([["你好"]]), "02你好;")
+        self.assertEqual(qsln.stringify([["\uffff"]]), "01\uffff;")
+        self.assertEqual(qsln.parse("02你好02世界;"), [["你好", "世界"]])
+
+    def test_surrogate_pairs_astral_plane(self):
+        # Characters outside BMP (code > 0xFFFF, requiring surrogate pairs / fallback path)
+        cases = [
+            [["🎉", "🚀", "🐱 Scratch", "😀😁"]],
+            [["\U00010000", "test\U0001f600end"]],
+            [["你好😀", "世界🎉"]],
+        ]
+        for c in cases:
+            enc = qsln.stringify(c)
+            self.assertFalse(enc.isascii())
+            self.assertNotEqual(len(enc.encode(qsln.UTF16_CODEC)) >> 1, len(enc))
+            self.assertEqual(qsln.parse(enc), c)
+
+        # Explicit header checks for surrogate pairs (2 UTF-16 code units per astral character)
+        self.assertEqual(qsln.stringify([["😀"]]), "02😀;")
+        self.assertEqual(qsln.stringify([["你好😀"]]), "04你好😀;")
+        self.assertEqual(qsln.parse("02😀;"), [["😀"]])
+        self.assertEqual(qsln.parse("04你好😀;"), [["你好😀"]])
 
     def test_type_coercion_in_stringify(self):
         non_string = [[123, True, False, 0]]
@@ -94,7 +130,7 @@ class TestQSLN(unittest.TestCase):
             qsln.parse("")
         self.assertEqual(str(cm.exception), "Unexpected end of input")
 
-        for s in ["0", "1", "11", "05abc;", "01a", "00", "01a01b", "0000", "1-1"]:
+        for s in ["0", "1", "11", "05abc;", "01a", "00", "01a01b", "0000", "1-1", "05你好;", "03你好", "05😀;", "02😀"]:
             with self.assertRaises(SyntaxError) as cm:
                 qsln.parse(s)
             self.assertEqual(str(cm.exception), "Unexpected end of input")
@@ -112,6 +148,10 @@ class TestQSLN(unittest.TestCase):
             ("1-1;", "Unexpected token '-' at position 1"),
             ("1-5;", "Unexpected token '-' at position 1"),
             ("01a1-101b;", "Unexpected token '-' at position 4"),
+            ("g2你好;", "Unexpected token 'g' at position 0"),
+            ("1-1你好;", "Unexpected token '-' at position 1"),
+            ("g2😀;", "Unexpected token 'g' at position 0"),
+            ("1-1😀;", "Unexpected token '-' at position 1"),
         ]:
             with self.assertRaises(SyntaxError) as cm:
                 qsln.parse(s)
