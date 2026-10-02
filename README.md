@@ -19,7 +19,7 @@ This format is primarily designed for the Scratch 3 environment.
 
 ## 📐 Specification
 
-All references to "string" below refer to JavaScript UTF-16 strings, and length is based on the length of the UTF-16 string.
+All string lengths in this specification are based on JavaScript UTF-16 string length.
 
 A QSLN document encodes a two-dimensional list of strings (`string[][]`). Each sublist ends with a semicolon (`;`).
 
