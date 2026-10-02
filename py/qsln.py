@@ -45,9 +45,9 @@ def parse(qsln: str) -> list[list[str]]:
     length = len(qsln)
     if qsln.isascii() or length == (len(raw := qsln.encode(UTF16_CODEC)) >> 1):
         while True:
-            c = qsln[i]
+            n = ord(qsln[i])
             # ';'
-            if c == ";":
+            if n == 59:
                 out.append(ls)
                 i += 1
                 if i == length:
@@ -56,7 +56,6 @@ def parse(qsln: str) -> list[list[str]]:
                 continue
 
             j = i + 1
-            n = ord(c)
             if 48 <= n <= 57:
                 # 0-9
                 i += n - 46
@@ -66,17 +65,17 @@ def parse(qsln: str) -> list[list[str]]:
                 if 65 <= masked <= 70:
                     i += masked - 53
                 else:
-                    raise SyntaxError(f"Unexpected token '{c}' at position {i}")
+                    raise SyntaxError(f"Unexpected token '{chr(n)}' at position {i}")
 
             if i >= length:
                 raise SyntaxError(ErrUnexpectedEndOfInput)
 
             n = 0
             while j < i:
-                digit = ord(qsln[j]) - 48
-                if digit < 0 or digit > 9:
+                c = ord(qsln[j]) - 48
+                if c < 0 or c > 9:
                     raise SyntaxError(f"Unexpected token '{qsln[j]}' at position {j}")
-                n = n * 10 + digit
+                n = n * 10 + c
                 j += 1
 
             i += n
