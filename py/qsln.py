@@ -42,8 +42,8 @@ def parse(qsln: str) -> list[list[str]]:
     ls: list[str] = []
     i = 0
 
-    if qsln.isascii():
-        length = len(qsln)
+    length = len(qsln)
+    if qsln.isascii() or length == (len(raw := qsln.encode(UTF16_CODEC)) >> 1):
         while True:
             c = qsln[i]
             # ';'
@@ -85,7 +85,6 @@ def parse(qsln: str) -> list[list[str]]:
 
             ls.append(qsln[j:i])
 
-    raw = qsln.encode(UTF16_CODEC)
     u16 = memoryview(raw).cast("H")
     length = len(u16)
     while True:
