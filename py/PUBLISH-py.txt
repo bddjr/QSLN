@@ -2,7 +2,7 @@ py -V
 pip install build twine
 
 py test_qsln.py
-py -c "import shutil, os; shutil.rmtree('dist') if os.path.exists('dist') else 0"
+py -c "import shutil, os; os.path.exists('dist') and shutil.rmtree('dist')"
 py -m build
 twine check dist/*
 twine upload --verbose dist/*
