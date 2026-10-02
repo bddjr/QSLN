@@ -20,8 +20,10 @@ def stringify(lists: Iterable[Iterable[Any]]) -> str:
         for v in l:
             if not isinstance(v, str):
                 v = str(v)
-            u16_len = len(v.encode(UTF16_CODEC)) >> 1
-            l_str = str(u16_len)
+            if v.isascii():
+                l_str = str(len(v))
+            else:
+                l_str = str(len(v.encode(UTF16_CODEC)) >> 1)
             out.append(HEX[len(l_str) - 1])
             out.append(l_str)
             out.append(v)
@@ -36,12 +38,56 @@ def parse(qsln: str) -> list[list[str]]:
     if not qsln:
         raise SyntaxError(ErrUnexpectedEndOfInput)
 
-    raw = qsln.encode(UTF16_CODEC)
-    u16 = memoryview(raw).cast("H")
-    length = len(u16)
     out: list[list[str]] = []
     ls: list[str] = []
     i = 0
+
+    if qsln.isascii():
+        length = len(qsln)
+        while True:
+            c = qsln[i]
+            # ';'
+            if c == ";":
+                out.append(ls)
+                i += 1
+                if i == length:
+                    return out
+                ls = []
+                continue
+
+            j = i + 1
+            n = ord(c)
+            if 48 <= n <= 57:
+                # 0-9
+                i += n - 46
+            else:
+                # [A-Fa-f]
+                masked = n & -33
+                if 65 <= masked <= 70:
+                    i += masked - 53
+                else:
+                    raise SyntaxError(f"Unexpected token '{c}' at position {i}")
+
+            if i >= length:
+                raise SyntaxError(ErrUnexpectedEndOfInput)
+
+            n = 0
+            while j < i:
+                digit = ord(qsln[j]) - 48
+                if digit < 0 or digit > 9:
+                    raise SyntaxError(f"Unexpected token '{qsln[j]}' at position {j}")
+                n = n * 10 + digit
+                j += 1
+
+            i += n
+            if i >= length:
+                raise SyntaxError(ErrUnexpectedEndOfInput)
+
+            ls.append(qsln[j:i])
+
+    raw = qsln.encode(UTF16_CODEC)
+    u16 = memoryview(raw).cast("H")
+    length = len(u16)
     while True:
         n = u16[i]
         # ';'
