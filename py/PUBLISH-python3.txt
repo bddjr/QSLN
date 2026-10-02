@@ -1,5 +1,8 @@
 python3 -V
+python3 -m pip install build twine
+
 python3 test_qsln.py
-pip install build twine
+python3 -c "import shutil, os; shutil.rmtree('dist') if os.path.exists('dist') else 0"
 python3 -m build
-twine upload dist/*
+python3 -m twine check dist/*
+python3 -m twine upload dist/*
